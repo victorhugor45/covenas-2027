@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coveñas 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Nunito+Sans:wght@400;600;700&display=swap">
+<style>
+/* Layout: tide-line poster header, tally strip, family cards grid, confirmation form */
+:root{
+  --bg:#f3f7f6; --surface:#ffffff; --ink:#0d2f3f; --muted:#557180; --line:#d5e3e3;
+  --sea:#0a7f8c; --sea-soft:#d8eef0; --sun:#f2b632; --coral:#e2624b; --leaf:#2f8a5b;
+  --display:"Bricolage Grotesque",ui-rounded,system-ui,sans-serif;
+  --body:"Nunito Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#08202b; --surface:#0f2d3a; --ink:#e7f2f2; --muted:#9db7bf; --line:#1f4655;
+  --sea:#3cc3cf; --sea-soft:#123d4a; --sun:#f5c55a; --coral:#f08470; --leaf:#5cc28c; color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{margin:0;color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+[hidden]{display:none!important}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:20px 56px;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+.hero{background:var(--sea);color:#fff;border-radius:18px;padding:26px 22px 0;overflow:hidden}
+.hero .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;font-weight:700}
+.hero h1{font-size:clamp(40px,9vw,76px);font-weight:800;line-height:.95;margin-top:6px}
+.hero .meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:12px;font-weight:600;align-items:center}
+.hero .count{display:inline-flex;align-items:baseline;gap:6px;background:var(--sun);color:#0d2f3f;border-radius:999px;padding:4px 14px;font-weight:700}
+.hero .count b{font-family:var(--display);font-size:22px;font-variant-numeric:tabular-nums}
+.hero p{max-width:60ch;margin:12px 0 0;opacity:.92}
+.hero svg{display:block;width:100%;height:46px;margin-top:20px}
+.tally{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.tile .n{font-family:var(--display);font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.tile .l{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+.tile.key{background:var(--sea-soft);border-color:transparent}
+.sechead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px}
+.sechead h2{font-size:24px}
+.sechead span{color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px;margin-top:12px}
+.fam{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.fam .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.fam h3{font-size:19px}
+.pill{font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px;white-space:nowrap}
+.st-confirmado{background:color-mix(in srgb,var(--leaf) 18%,transparent);color:var(--leaf)}
+.st-pendiente{background:color-mix(in srgb,var(--muted) 16%,transparent);color:var(--muted)}
+.st-talvez{background:color-mix(in srgb,var(--sun) 28%,transparent);color:var(--ink)}
+.st-nova{background:color-mix(in srgb,var(--coral) 18%,transparent);color:var(--coral)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:13px;border:1px solid var(--line);border-radius:8px;padding:2px 8px}
+.chip small{color:var(--muted)}
+.note{font-size:13px;color:var(--muted)}
+.empty{font-size:13px;color:var(--muted);font-style:italic}
+.emptystate{background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:22px;color:var(--muted)}
+form{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.row{grid-template-columns:1fr}}
+label{display:flex;flex-direction:column;gap:4px;font-weight:700;font-size:13px}
+input,select,textarea{font:inherit;font-weight:400;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 10px;min-width:0;width:100%}
+textarea{min-height:64px;resize:vertical}
+.lbl{font-weight:700;font-size:13px;margin-bottom:6px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg label{flex-direction:row;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer;font-weight:600}
+.seg input{width:auto}
+.seg label:has(input:checked){background:var(--sea);color:#fff;border-color:var(--sea)}
+.people{display:flex;flex-direction:column;gap:8px}
+.person{display:grid;grid-template-columns:1.6fr 1.2fr .6fr auto;gap:8px;align-items:center}
+@media (max-width:560px){.person{grid-template-columns:1fr 1fr .7fr auto}}
+button{font:inherit;font-weight:700;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:9px 14px;cursor:pointer}
+button.primary{background:var(--coral);border-color:var(--coral);color:#fff}
+button.small{padding:4px 10px;font-size:13px}
+button.ghost{background:transparent}
+button:disabled{opacity:.6;cursor:wait}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.hint{font-size:13px;color:var(--muted);margin:0}
+.msgline{font-weight:700}
+.msgline.ok{color:var(--leaf)} .msgline.err{color:var(--coral)}
+.out{background:var(--sea-soft);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.out pre{white-space:pre-wrap;margin:0;font-family:var(--body);font-size:14px;background:var(--surface);border-radius:8px;padding:10px;overflow-x:auto}
+.out .btns{display:flex;flex-wrap:wrap;gap:8px}
+a.wa{display:inline-flex;align-items:center;text-decoration:none;font-weight:700;border-radius:10px;padding:9px 14px;background:var(--leaf);color:#fff}
+footer{color:var(--muted);font-size:13px}
+@media (prefers-reduced-motion:no-preference){.hero svg path{animation:tide 6s ease-in-out infinite alternate}}
+@keyframes tide{from{transform:translateX(0)}to{transform:translateX(-30px)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Paseo familiar · Sucre</div>
+    <h1>Coveñas 2027</h1>
+    <div class="meta">
+      <span>Jue 14 – Dom 17 de enero · 4 días, 3 noches</span>
+      <span class="count"><b id="days">–</b> días para el mar</span>
+    </div>
+    <p>Cada familia registra aquí quiénes van, con nombres y edades. Con esa lista sabemos cuántas camas, cuánta comida y qué cabañas buscar.</p>
+    <svg viewBox="0 0 400 46" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 22 Q25 6 50 22 T100 22 T150 22 T200 22 T250 22 T300 22 T350 22 T400 22 T450 22 V46 H0Z" fill="#ffffff" opacity=".18"/>
+      <path d="M0 30 Q25 16 50 30 T100 30 T150 30 T200 30 T250 30 T300 30 T350 30 T400 30 T450 30 V46 H0Z" fill="#ffffff" opacity=".3"/>
+    </svg>
+  </header>
+
+  <section aria-label="Resumen">
+    <div class="tally">
+      <div class="tile key"><div class="n" id="k-personas">0</div><div class="l">Personas que van</div></div>
+      <div class="tile"><div class="n" id="k-adulto">0</div><div class="l">Adultos</div></div>
+      <div class="tile"><div class="n" id="k-mayor">0</div><div class="l">Adultos mayores</div></div>
+      <div class="tile"><div class="n" id="k-nino">0</div><div class="l">Niños</div></div>
+      <div class="tile"><div class="n" id="k-bebe">0</div><div class="l">Bebés</div></div>
+      <div class="tile"><div class="n" id="k-mascota">0</div><div class="l">Mascotas</div></div>
+      <div class="tile"><div class="n" id="k-fams">0/0</div><div class="l">Familias confirmadas</div></div>
+    </div>
+    <p class="hint" style="margin-top:8px">Los números cuentan solo a las familias confirmadas.</p>
+  </section>
+
+  <section aria-labelledby="t-fams">
+    <div class="sechead"><h2 id="t-fams">Las familias</h2><span id="updated">Cargando la lista…</span></div>
+    <div id="fams" class="grid">
+      <div class="emptystate">Cargando las familias…</div>
+    </div>
+  </section>
+
+  <section aria-labelledby="t-form" id="registro">
+    <div class="sechead"><h2 id="t-form">Registrar mi familia</h2></div>
+    <p class="hint" style="margin:6px 0 12px">Un representante por familia registra a todos los que viajan. Si ya se registraron, elige tu familia y verás tus datos para actualizarlos.</p>
+    <form id="f" novalidate>
+      <div class="row">
+        <label for="famsel">Familia
+          <select id="famsel"><option value="">Elige tu familia…</option></select>
+        </label>
+        <label for="contacto">Quién registra
+          <input id="contacto" placeholder="Tu nombre" maxlength="60">
+        </label>
+      </div>
+      <label for="famnew" id="famnewwrap" hidden>Nombre de tu familia
+        <input id="famnew" placeholder="Ej: Los Rodríguez" maxlength="60">
+      </label>
+      <div>
+        <div class="lbl">¿Van al paseo?</div>
+        <div class="seg" role="radiogroup">
+          <label><input type="radio" name="estado" id="e1" value="confirmado" checked> Sí, vamos</label>
+          <label><input type="radio" name="estado" id="e2" value="talvez"> Tal vez</label>
+          <label><input type="radio" name="estado" id="e3" value="nova"> No podemos</label>
+        </div>
+      </div>
+      <div id="peoplewrap">
+        <div class="lbl">Quiénes viajan</div>
+        <div class="people" id="people"></div>
+        <button type="button" class="small ghost" id="addp" style="margin-top:8px">+ Agregar persona o mascota</button>
+      </div>
+      <label for="notas">Notas (comida, salud, llegada, cama especial…)
+        <textarea id="notas" maxlength="600" placeholder="Ej: la abuela necesita cama baja; Tomás no come mariscos; llegamos el viernes"></textarea>
+      </label>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+        <button type="submit" class="primary" id="go">Guardar registro</button>
+        <span class="msgline" id="status" aria-live="polite"></span>
+      </div>
+      <div class="out" id="out" hidden>
+        <div class="msgline ok">¡Listo! Tu familia quedó registrada.</div>
+        <p class="hint">Si quieres, avisa en el grupo con este mensaje:</p>
+        <pre id="msg"></pre>
+        <div class="btns">
+          <a class="wa" id="wa" href="#" target="_blank" rel="noopener">Avisar por WhatsApp</a>
+          <button type="button" id="copy">Copiar mensaje</button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <footer>Organiza Vic con apoyo de Claude · Cabañas frente al mar · 14–17 de enero de 2027</footer>
+</div>
+
+<script>
+(function(){
+  var TIPOS=[["adulto","Adulto"],["mayor","Adulto mayor"],["nino","Niño"],["bebe","Bebé (0–2)"],["mascota","Mascota"]];
+  var TLABEL={}; TIPOS.forEach(function(t){TLABEL[t[0]]=t[1]});
+  var ST={confirmado:"Confirmado",talvez:"Tal vez",pendiente:"Pendiente",nova:"No va"};
+  var API="https://script.google.com/macros/s/AKfycbykOucrVP1gywR5hmvlJ-J2_UQoZ2cZ0qLpm8jf7HSQRJjDirWYM9lWyhSMcAf6-OHz9A/exec";
+  var families=[]; var appUrl=location.href.split("#")[0].split("?")[0];
+  var $=function(id){return document.getElementById(id)};
+
+  // cuenta regresiva
+  var now=new Date(); now.setHours(0,0,0,0);
+  $("days").textContent=Math.max(0,Math.round((new Date(2027,0,14)-now)/86400000));
+
+  function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+
+  // filas de personas
+  var peopleEl=$("people"), pid=0;
+  function addPerson(p){
+    p=p||{}; pid++;
+    var r=document.createElement("div"); r.className="person";
+    var opts=TIPOS.map(function(t){return '<option value="'+t[0]+'"'+(p.tipo===t[0]?" selected":"")+'>'+t[1]+'</option>'}).join("");
+    r.innerHTML='<input id="pn'+pid+'" aria-label="Nombre" placeholder="Nombre" maxlength="60" value="'+esc(p.nombre)+'">'+
+      '<select id="pt'+pid+'" aria-label="Tipo">'+opts+'</select>'+
+      '<input id="pe'+pid+'" aria-label="Edad" inputmode="numeric" maxlength="3" placeholder="Edad" value="'+esc(p.edad)+'">'+
+      '<button type="button" class="small ghost" aria-label="Quitar">✕</button>';
+    r.querySelector("button").onclick=function(){r.remove(); if(!peopleEl.children.length) addPerson();};
+    peopleEl.appendChild(r);
+  }
+  function setPeople(list){peopleEl.innerHTML=""; (list&&list.length?list:[{tipo:"adulto"},{tipo:"adulto"}]).forEach(addPerson)}
+  function readPeople(){
+    return Array.prototype.map.call(peopleEl.children,function(r){
+      var i=r.querySelectorAll("input,select");
+      return {nombre:i[0].value.trim(),tipo:i[1].value,edad:i[2].value.trim()};
+    }).filter(function(p){return p.nombre});
+  }
+  setPeople();
+  $("addp").onclick=function(){addPerson({tipo:"nino"})};
+
+  // mostrar/ocultar personas según estado
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="estado"]'),function(r){
+    r.addEventListener("change",function(){$("peoplewrap").hidden=(r.value==="nova"&&r.checked)});
+  });
+
+  // selector de familia
+  $("famsel").addEventListener("change",function(){
+    var v=this.value; $("famnewwrap").hidden=(v!=="__new");
+    $("out").hidden=true; $("status").textContent="";
+    var f=families.find(function(x){return x.nombre===v});
+    if(f) loadInto(f,false);
+  });
+
+  function loadInto(f,scroll){
+    $("famsel").value=f.nombre; $("famnewwrap").hidden=true;
+    $("contacto").value=f.contacto||"";
+    var est=f.estado==="pendiente"?"confirmado":f.estado;
+    var r=document.querySelector('input[name="estado"][value="'+est+'"]'); if(r) r.checked=true;
+    $("peoplewrap").hidden=(est==="nova");
+    $("notas").value=f.notas||"";
+    setPeople(f.miembros);
+    if(f.miembros&&f.miembros.length) setStatus("Estos son sus datos actuales. Cambia lo que necesites y guarda.","");
+    if(scroll) $("registro").scrollIntoView({behavior:"smooth"});
+  }
+
+  function readForm(){
+    var sel=$("famsel").value;
+    var est=document.querySelector('input[name="estado"]:checked');
+    return {nombre:sel==="__new"?$("famnew").value.trim():sel, contacto:$("contacto").value.trim(),
+      estado:est?est.value:"confirmado", miembros:readPeople(), notas:$("notas").value.trim()};
+  }
+
+  function buildMsg(f){
+    var L=["#Coveñas2027 🏖️","La familia "+f.nombre+" ya se registró: "+({confirmado:"¡vamos!",talvez:"tal vez vamos",nova:"esta vez no podemos"}[f.estado])];
+    if(f.estado!=="nova"&&f.miembros.length) L.push("Somos "+f.miembros.length+": "+f.miembros.map(function(p){return p.nombre}).join(", "));
+    if(appUrl) L.push("¿Ya registraste a tu familia? 👉 "+appUrl);
+    return L.join("\n");
+  }
+
+  function setStatus(t,cls){var s=$("status"); s.textContent=t; s.className="msgline "+(cls||"")}
+
+  $("f").addEventListener("submit",function(e){
+    e.preventDefault(); $("out").hidden=true;
+    var f=readForm();
+    if(!f.nombre){setStatus("Elige tu familia o escribe su nombre.","err"); ($("famsel").value==="__new"?$("famnew"):$("famsel")).focus(); return;}
+    if(f.estado!=="nova"&&!f.miembros.length){setStatus("Agrega al menos una persona con su nombre.","err"); return;}
+    var miss=f.miembros.filter(function(p){return (p.tipo==="nino"||p.tipo==="bebe")&&!p.edad});
+    if(miss.length){setStatus("Escribe la edad de "+miss.map(function(p){return p.nombre}).join(", ")+".","err"); return;}
+    var b=$("go"); b.disabled=true; setStatus("Guardando…","");
+    call(API,{method:"POST",body:JSON.stringify(f)})
+      .then(function(data){
+        b.disabled=false; setStatus("","");
+        apply(data);
+        var m=buildMsg(f); $("msg").textContent=m;
+        $("wa").href="https://wa.me/?text="+encodeURIComponent(m);
+        $("out").hidden=false; $("famsel").value=f.nombre; $("famnewwrap").hidden=true;
+      })
+      .catch(function(err){
+        b.disabled=false; setStatus("No se pudo guardar. Revisa tu conexión e intenta de nuevo.","err");
+        console.error(err);
+      });
+  });
+
+  $("copy").onclick=function(){
+    var t=$("msg").textContent;
+    function sel(){var r=document.createRange();r.selectNodeContents($("msg"));var s=getSelection();s.removeAllRanges();s.addRange(r);setStatus("Mensaje seleccionado: cópialo con tu teléfono.","")}
+    try{navigator.clipboard.writeText(t).then(function(){setStatus("Mensaje copiado.","ok")},sel)}catch(e){sel()}
+  };
+
+  // pintar
+  function apply(data){
+    families=(data&&data.familias)||[];
+    render(data&&data.actualizado);
+  }
+  function render(actualizado){
+    var c={personas:0,adulto:0,mayor:0,nino:0,bebe:0,mascota:0}, conf=0;
+    families.forEach(function(f){
+      if(f.estado!=="confirmado") return; conf++;
+      f.miembros.forEach(function(p){c[p.tipo]=(c[p.tipo]||0)+1; if(p.tipo!=="mascota") c.personas++});
+    });
+    ["personas","adulto","mayor","nino","bebe","mascota"].forEach(function(k){$("k-"+k).textContent=c[k]});
+    $("k-fams").textContent=conf+"/"+families.length;
+
+    var sel=$("famsel"), cur=sel.value;
+    sel.innerHTML='<option value="">Elige tu familia…</option>'+
+      families.map(function(f){return '<option value="'+esc(f.nombre)+'">'+esc(f.nombre)+'</option>'}).join("")+
+      '<option value="__new">Mi familia no está en la lista</option>';
+    sel.value=cur;
+
+    var g=$("fams");
+    if(!families.length){g.innerHTML='<div class="emptystate">Todavía no hay familias en la lista. Registra la tuya abajo.</div>'; $("updated").textContent=""; return;}
+    var order={confirmado:0,talvez:1,pendiente:2,nova:3};
+    var list=families.slice().sort(function(a,b){return (order[a.estado]-order[b.estado])||a.nombre.localeCompare(b.nombre,"es")});
+    g.innerHTML=list.map(function(f,i){
+      var ms=f.miembros;
+      var body=ms.length&&f.estado!=="nova"
+        ?'<div class="chips">'+ms.map(function(p){return '<span class="chip">'+esc(p.nombre)+' <small>'+esc(TLABEL[p.tipo]||"")+(p.edad?" · "+esc(p.edad):"")+'</small></span>'}).join("")+'</div>'
+        :'<div class="empty">'+(f.estado==="nova"?"No viajan esta vez.":"Aún no se han registrado.")+'</div>';
+      return '<article class="fam"><div class="top"><h3>'+esc(f.nombre)+'</h3><span class="pill st-'+esc(f.estado)+'">'+esc(ST[f.estado]||f.estado)+'</span></div>'+
+        body+(f.notas?'<div class="note">'+esc(f.notas)+'</div>':'')+
+        '<div><button type="button" class="small" data-i="'+families.indexOf(f)+'">'+(f.estado==="pendiente"?"Registrar":"Actualizar")+'</button></div></article>';
+    }).join("");
+    Array.prototype.forEach.call(g.querySelectorAll("[data-i]"),function(b){b.onclick=function(){loadInto(families[+b.getAttribute("data-i")],true)}});
+    var n=families.length;
+    $("updated").textContent=(actualizado?"Último registro: "+new Date(actualizado).toLocaleDateString("es-CO",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"})+" · ":"")+n+(n===1?" familia":" familias");
+  }
+
+  // POST va como texto plano para que el navegador no pida permisos extra (CORS)
+  function call(url,opts){
+    return fetch(url,opts).then(function(r){return r.json()}).then(function(j){
+      if(!j||!j.ok) throw new Error((j&&j.error)||"Respuesta inválida");
+      return j.data;
+    });
+  }
+  function load(){
+    call(API+"?action=data&t="+Date.now())
+      .then(apply)
+      .catch(function(){$("updated").textContent="La lista no se pudo cargar. Recarga la página."});
+  }
+  load();
+})();
+</script>
+</body>
+</html>
