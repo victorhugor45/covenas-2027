@@ -93,7 +93,7 @@ footer{color:var(--muted);font-size:13px}
     <div class="eyebrow">Paseo familiar · Sucre</div>
     <h1>Coveñas 2027</h1>
     <div class="meta">
-      <span>Jue 14 – Dom 17 de enero · 4 días, 3 noches</span>
+      <span>Lun 4 – Jue 7 de enero · 4 días, 3 noches</span>
       <span class="count"><b id="days">–</b> días para el mar</span>
     </div>
     <p>Cada familia registra aquí quiénes van, con nombres y edades. Con esa lista sabemos cuántas camas, cuánta comida y qué cabañas buscar.</p>
@@ -170,7 +170,7 @@ footer{color:var(--muted);font-size:13px}
     </form>
   </section>
 
-  <footer>Organiza Vic con apoyo de Claude · Cabañas frente al mar · 14–17 de enero de 2027</footer>
+  <footer>Organiza Vic con apoyo de Claude · Cabañas frente al mar · 4–7 de enero de 2027</footer>
 </div>
 
 <script>
@@ -184,7 +184,7 @@ footer{color:var(--muted);font-size:13px}
 
   // cuenta regresiva
   var now=new Date(); now.setHours(0,0,0,0);
-  $("days").textContent=Math.max(0,Math.round((new Date(2027,0,14)-now)/86400000));
+  $("days").textContent=Math.max(0,Math.round((new Date(2027,0,4)-now)/86400000));
 
   function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 
